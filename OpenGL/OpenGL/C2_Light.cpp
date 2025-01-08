@@ -7,8 +7,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "Texture.h"
 
-const float screenWidth = 800;
 const float screenHeight = 800;
+const float screenWidth = screenHeight * 1.6f;
 
 
 using namespace std;
@@ -92,8 +92,10 @@ int main()
 		// First : Do Activate Shader AND SETTIGN VALUES
 		shaderProgram.Activate();  
 
-		camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "cameraMatrix");
-		 
+		camera.Inputs(window);
+		camera.UpdateMatrix(45.0f, 0.1f, 100.0f);
+		camera.Matrix(shaderProgram, "cameraMatrix");
+
 		texture.Bind(); 
 		vao1.Bind();
 

@@ -7,6 +7,7 @@ Texture::Texture(const char* image, GLenum texType, GLenum slot, GLenum format, 
 
 	// Stores the width, height, and the number of color channels of the image
 	int widthImg, heightImg, numColCh; 
+	stbi_set_flip_vertically_on_load(true);
 	unsigned char* bytes = stbi_load(image, &widthImg, &heightImg, &numColCh, STBI_rgb_alpha);
 
 	// Generates an OpenGL texture object
