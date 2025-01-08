@@ -85,6 +85,12 @@
     <None Include="default.frag">
       <Filter>리소스 파일\Shaders</Filter>
     </None>
+    <None Include="light.vert">
+      <Filter>리소스 파일\Shaders</Filter>
+    </None>
+    <None Include="light.frag">
+      <Filter>리소스 파일\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\frog.jpg">

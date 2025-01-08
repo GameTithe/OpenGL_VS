@@ -185,6 +185,8 @@
   <ItemGroup>
     <None Include="default.vert" />
     <None Include="default.frag" />
+    <None Include="light.frag" />
+    <None Include="light.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\frog.jpg" />

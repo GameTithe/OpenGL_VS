@@ -10,7 +10,6 @@ uniform vec4 lightColor;
 
 void main()
 {
-	//FragColor = vec4(color, 1.0f);
-
-	FragColor = texture(tex0, texCord) * lightColor;
+	FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f) * lightColor; 
+	//FragColor = texture(tex0, texCord);
 }
