@@ -102,5 +102,11 @@
     <Image Include="..\frog.jpg">
       <Filter>리소스 파일\Textures</Filter>
     </Image>
+    <Image Include="Textures\Stone\PavingStones142_1K-JPG_Color.jpg">
+      <Filter>리소스 파일\Textures</Filter>
+    </Image>
+    <Image Include="Textures\Stone\PavingStones142_1K-JPG_Roughness.jpg">
+      <Filter>리소스 파일\Textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>

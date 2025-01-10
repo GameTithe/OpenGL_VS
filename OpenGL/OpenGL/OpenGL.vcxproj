@@ -192,6 +192,8 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\frog.jpg" />
+    <Image Include="Textures\Stone\PavingStones142_1K-JPG_Color.jpg" />
+    <Image Include="Textures\Stone\PavingStones142_1K-JPG_Roughness.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

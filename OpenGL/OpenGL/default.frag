@@ -8,6 +8,7 @@ in vec3 curPos;
 out vec4 FragColor;
 
 uniform sampler2D tex0;
+uniform sampler2D tex1;
 
 uniform vec3 lightPos;
 uniform vec4 lightColor;
@@ -17,7 +18,7 @@ uniform vec3 cameraPos;
 
 void main()
 { 
-	float ambient = 0.2f;
+	float ambient = 0.1f;
 
 	vec3 lightDir = normalize(lightPos - curPos);
 	float diffuse = max( dot( lightDir, normal) , 0.0f);
@@ -30,5 +31,6 @@ void main()
 	float specular = specularLight * specularPow;
 
 
-	FragColor = texture(tex0, texCord) * lightColor * ( diffuse + ambient + specular);
+	//FragColor = texture(tex0, texCord) * lightColor * (diffuse + ambient ) + texture(tex1, texCord).r * specular;
+	FragColor = texture(tex0, texCord) * lightColor;// * ( diffuse + ambient + specular);
 }
