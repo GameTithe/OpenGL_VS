@@ -103,13 +103,9 @@ int main()
 	floorVao.LinkAttrib(floorVbo, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float)));
 	floorVao.LinkAttrib(floorVbo, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float)));
 
-	Texture floorTexture("Textures/Stone/PavingStones142_1K-JPG_Color.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-	floorTexture.texUnit(floorShader, "tex0", 0);
-	floorTexture.Unbind();
-
-	Texture floorSpecTexture("Textures/Stone/PavingStones142_1K-JPG_Roughness.jpg", GL_TEXTURE_2D, GL_TEXTURE1, GL_RGBA, GL_UNSIGNED_BYTE);
-	floorSpecTexture.texUnit(floorShader, "tex1", 1);
-	floorSpecTexture.Unbind();
+	floorVao.Unbind();
+	floorVbo.Unbind();
+	floorEbo.Unbind();
 
 
 	// light
@@ -121,7 +117,11 @@ int main()
 	EBO lightEbo(lightIndices, sizeof(lightIndices));
 
 	lightVao.LinkAttrib(lightVbo, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
-	 
+	
+	lightVao.Unbind();
+	lightVbo.Unbind();
+	lightEbo.Unbind();
+
 	Camera camera(screenWidth, screenHeight, vec3(0.0f, 0.0f, 2.0f));
 
 	// Uniform  
@@ -141,7 +141,10 @@ int main()
 		SetVectorUniform(frogShader, "cameraPos", camera.Position);
 
 	}
+	
 	// Floor
+	Texture floorTexture; 
+	Texture floorSpecTexture;
 	{
 		floorShader.Activate();
 
@@ -152,9 +155,12 @@ int main()
 		SetVectorUniform(floorShader, "lightColor", lightColor);
 		SetVectorUniform(floorShader, "cameraPos", camera.Position);
 
-		floorVao.Unbind();
-		floorVbo.Unbind();
-		floorEbo.Unbind();
+		floorTexture.Init("planks.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
+		floorTexture.texUnit(floorShader, "tex0", 0);
+		 
+		floorSpecTexture.Init("planksSpec.png", GL_TEXTURE_2D, 1, GL_RGBA, GL_UNSIGNED_BYTE);
+		floorSpecTexture.texUnit(floorShader, "tex1", 1);
+
 	}
 
 	// light
@@ -165,10 +171,7 @@ int main()
 
 		SetMatrixUniform(lightShader, "modelMatrix", lightModelMatrix);
 		SetVectorUniform(lightShader, "lightColor", lightColor);
-
-		lightVao.Unbind();
-		lightVbo.Unbind();
-		lightEbo.Unbind();
+		 
 	}
 
 	glEnable(GL_DEPTH_TEST);
@@ -193,8 +196,11 @@ int main()
 		//Floor 
 		floorShader.Activate();
 		camera.Matrix(floorShader, "cameraMatrix"); 
-		floorTexture.Bind();
-		floorSpecTexture.Bind();
+
+		floorVao.Bind();
+		floorTexture.Bind(0);
+		floorSpecTexture.Bind(1);
+
 		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
 
 		// Light

@@ -30,7 +30,7 @@ void main()
 	float specularPow = pow(max(dot(viewDir, reflectDir), 0.0f),8);
 	float specular = specularLight * specularPow;
 
-
-	//FragColor = texture(tex0, texCord) * lightColor * (diffuse + ambient ) + texture(tex1, texCord).r * specular;
-	FragColor = texture(tex0, texCord) * lightColor;// * ( diffuse + ambient + specular);
+	 
+	FragColor = texture(tex0, texCord) * lightColor * (diffuse + ambient ) + texture(tex1, texCord).r * specular;
+	//FragColor = texture(tex0, texCord) * lightColor * ( diffuse + ambient + specular);
 }
