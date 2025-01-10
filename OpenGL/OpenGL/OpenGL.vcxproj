@@ -167,6 +167,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Pyramid.cpp" />
+    <ClCompile Include="Pyramid.h" />
     <ClCompile Include="ShaderClass.cpp" />
     <ClCompile Include="ShaderClass.h" />
     <ClCompile Include="Texture.cpp" />
