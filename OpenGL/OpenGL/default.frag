@@ -15,22 +15,33 @@ uniform vec4 lightColor;
 
 uniform vec3 cameraPos;
 
+vec4 pointLight()
+{	
+	vec3 lightVec = lightPos - curPos;
+	float dist = length(lightVec);
+	float a = 3.0f;
+	float b = 0.7f;
+	float inten = 1.0f / ( a * dist * dist + b * dist + 1.0f);
 
-void main()
-{ 
-	float ambient = 0.1f;
+	float ambient = 0.2f;
+	vec3 n_normal = normalize(normal);
 
-	vec3 lightDir = normalize(lightPos - curPos);
-	float diffuse = max( dot( lightDir, normal) , 0.0f);
+	vec3 lightDir = normalize(lightVec);
+	float diffuse = max( dot( lightDir, n_normal) , 0.0f);
 
 	float specularLight = 0.5f;
 	vec3 viewDir = normalize(cameraPos - curPos);
-	vec3 reflectDir = reflect(-lightDir, normal);
+	vec3 reflectDir = reflect(-lightDir, n_normal);
 
-	float specularPow = pow(max(dot(viewDir, reflectDir), 0.0f),8);
+	float specularPow = pow(max(dot(viewDir, reflectDir), 0.0f), 16);
 	float specular = specularLight * specularPow;
 
 	 
-	FragColor = texture(tex0, texCord) * lightColor * (diffuse + ambient ) + texture(tex1, texCord).r * specular;
-	//FragColor = texture(tex0, texCord) * lightColor * ( diffuse + ambient + specular);
+	//return texture(tex0, texCord) * lightColor * (diffuse + ambient + specular);
+	return texture(tex0, texCord) * (  ambient + diffuse *inten + specular * inten) * lightColor;
+}
+void main()
+{ 
+	 
+	FragColor = pointLight();
 }

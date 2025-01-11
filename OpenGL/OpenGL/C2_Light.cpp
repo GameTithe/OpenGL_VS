@@ -122,10 +122,10 @@ int main()
 	lightVbo.Unbind();
 	lightEbo.Unbind();
 
-	Camera camera(screenWidth, screenHeight, vec3(0.0f, 0.0f, 2.0f));
+	Camera camera(screenWidth, screenHeight, vec3(0.0f, 1.0f, 2.0f));
 
 	// Uniform  
-	vec3 lightPosition = vec3(0.5f, 0.3f, 0.5f);
+	vec3 lightPosition = vec3(0.5f, 0.5f, 0.5f);
 	vec4 lightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	//Pyradmid
@@ -134,7 +134,7 @@ int main()
 		frogShader.Activate();
 
 		mat4 objModelMatrix = mat4(1.0f);
-		objModelMatrix = translate(objModelMatrix, vec3(-1.0f, -0.2f, 0.0f));
+		objModelMatrix = translate(objModelMatrix, vec3(-2.0f, -0.2f, 0.0f));
 		SetMatrixUniform(frogShader, "modelMatrix", objModelMatrix);
 		SetVectorUniform(frogShader, "lightPos", lightPosition);
 		SetVectorUniform(frogShader, "lightColor", lightColor);
@@ -149,7 +149,7 @@ int main()
 		floorShader.Activate();
 
 		mat4 objModelMatrix = mat4(1.0f);
-		objModelMatrix = translate(objModelMatrix, vec3(0.0f, -0.4f, 0.0f)) * scale(objModelMatrix, vec3(1.5f, 1.5f, 1.5f));
+		objModelMatrix = translate(objModelMatrix, vec3(0.0f, 0.0f, 0.0f)); //  *scale(objModelMatrix, vec3(1.5f, 1.5f, 1.5f));
 		SetMatrixUniform(floorShader, "modelMatrix", objModelMatrix);
 		SetVectorUniform(floorShader, "lightPos", lightPosition);
 		SetVectorUniform(floorShader, "lightColor", lightColor);
