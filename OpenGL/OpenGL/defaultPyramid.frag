@@ -7,7 +7,9 @@ in vec3 curPos;
 
 out vec4 FragColor;
 
-uniform sampler2D tex0; 
+uniform sampler2D diffuse0;
+uniform sampler2D specular0;
+
 
 uniform vec3 lightPos;
 uniform vec4 lightColor;

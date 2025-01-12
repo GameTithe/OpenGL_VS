@@ -4,8 +4,7 @@ in vec3 color;
 in vec2 texCord;
 
 out vec4 FragColor;
-
-uniform sampler2D tex0;
+ 
 uniform vec4 lightColor;
 
 void main()

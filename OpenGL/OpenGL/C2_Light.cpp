@@ -1,4 +1,4 @@
-#include <iostream> 
+ #include <iostream> 
 #include <stb/stb_image.h>
 
 #include "OpenGL.h"
@@ -8,6 +8,7 @@
 #include "Texture.h"
 
 #include "Pyramid.h"
+#include "Mesh.h"
 
 const float screenHeight = 800;
 const float screenWidth = screenHeight * 1.6f;
@@ -15,6 +16,48 @@ const float screenWidth = screenHeight * 1.6f;
 
 using namespace std;
 
+Vertex vertices[] =
+{ //               COORDINATES           /            COLORS          /           NORMALS         /       TEXTURE COORDINATES    //
+	Vertex{glm::vec3(-1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)},
+	Vertex{glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)},
+	Vertex{glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)},
+	Vertex{glm::vec3(1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}
+};
+
+// Indices for vertices order
+GLuint indices[] =
+{
+	0, 1, 2,
+	0, 2, 3
+};
+
+Vertex lightVertices[] =
+{ //     COORDINATES     //
+	Vertex{glm::vec3(-0.1f, -0.1f,  0.1f)},
+	Vertex{glm::vec3(-0.1f, -0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f, -0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f, -0.1f,  0.1f)},
+	Vertex{glm::vec3(-0.1f,  0.1f,  0.1f)},
+	Vertex{glm::vec3(-0.1f,  0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f,  0.1f, -0.1f)},
+	Vertex{glm::vec3(0.1f,  0.1f,  0.1f)}
+};
+
+GLuint lightIndices[] =
+{
+	0, 1, 2,
+	0, 2, 3,
+	0, 4, 7,
+	0, 7, 3,
+	3, 7, 6,
+	3, 6, 2,
+	2, 6, 5,
+	2, 5, 1,
+	1, 5, 4,
+	1, 4, 0,
+	4, 5, 6,
+	4, 6, 7
+};
 
 int main()
 {
@@ -27,49 +70,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 
-	// Vertices coordinates
-	GLfloat vertices[] =
-	{ //     COORDINATES     /        COLORS        /    TexCoord    /       NORMALS     //
-		-1.0f, 0.0f,  1.0f,		0.0f, 0.0f, 0.0f,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,
-		-1.0f, 0.0f, -1.0f,		0.0f, 0.0f, 0.0f,		0.0f, 1.0f,		0.0f, 1.0f, 0.0f,
-		 1.0f, 0.0f, -1.0f,		0.0f, 0.0f, 0.0f,		1.0f, 1.0f,		0.0f, 1.0f, 0.0f,
-		 1.0f, 0.0f,  1.0f,		0.0f, 0.0f, 0.0f,		1.0f, 0.0f,		0.0f, 1.0f, 0.0f
-	};
-
-	// Indices for vertices order
-	GLuint indices[] =
-	{
-		0, 1, 2,
-		0, 2, 3
-	}; 
-
-	GLfloat lightVertices[] =
-	{ //     COORDINATES     //
-		-0.1f, -0.1f,  0.1f,
-		-0.1f, -0.1f, -0.1f,
-		 0.1f, -0.1f, -0.1f,
-		 0.1f, -0.1f,  0.1f,
-		-0.1f,  0.1f,  0.1f,
-		-0.1f,  0.1f, -0.1f,
-		 0.1f,  0.1f, -0.1f,
-		 0.1f,  0.1f,  0.1f
-	};
-
-	GLuint lightIndices[] =
-	{
-		0, 1, 2,
-		0, 2, 3,
-		0, 4, 7,
-		0, 7, 3,
-		3, 7, 6,
-		3, 6, 2,
-		2, 6, 5,
-		2, 5, 1,
-		1, 5, 4,
-		1, 4, 0,
-		4, 5, 6,
-		4, 6, 7
-	};
+	 
 	//create window
 	GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "OpenGL", NULL,
 		NULL);
@@ -87,40 +88,33 @@ int main()
 	glViewport(0, 0, screenWidth, screenHeight);
 
 	//Pyramid 
-	Pyramid frogPyramid; 
-	frogPyramid.Init();
+	//Pyramid frogPyramid; 
+	//frogPyramid.Init();
+
+	//Texture textures[2] = {
+	//	Texture("planks.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+	//	Texture("planksSpec.png", "specular", 1, GL_RGBA, GL_UNSIGNED_BYTE),
+	//};	
+	
+	Texture textures[]
+   {
+	   Texture("planks.png", "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+	   Texture("planksSpec.png", "specular", 1, GL_RED, GL_UNSIGNED_BYTE)
+   };
 
 	//Floor 
-	Shader floorShader("default.vert", "default.frag");
-	VAO floorVao;
-	floorVao.Bind();
-	
-	VBO floorVbo(vertices, sizeof(vertices));
-	EBO floorEbo(indices, sizeof(indices));
-
-	floorVao.LinkAttrib(floorVbo, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*)0);
-	floorVao.LinkAttrib(floorVbo, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float)));
-	floorVao.LinkAttrib(floorVbo, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float)));
-	floorVao.LinkAttrib(floorVbo, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float)));
-
-	floorVao.Unbind();
-	floorVbo.Unbind();
-	floorEbo.Unbind();
-
+	Shader floorShader("default.vert", "default.frag");     
+	std::vector<Vertex> verts(vertices, vertices + sizeof(vertices)  / sizeof(Vertex));
+	std::vector<GLuint> inds(indices, indices + sizeof(indices) / sizeof(GLuint)); 
+	std::vector<Texture> texs(textures, textures + sizeof(textures) / sizeof(Texture));
+	Mesh floor(verts, inds, texs);
 
 	// light
 	Shader lightShader("light.vert", "light.frag");
-	VAO lightVao;
-	lightVao.Bind();
-
-	VBO lightVbo(lightVertices, sizeof(lightVertices));
-	EBO lightEbo(lightIndices, sizeof(lightIndices));
-
-	lightVao.LinkAttrib(lightVbo, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
+	std::vector<Vertex> lightVerts(lightVertices, lightVertices + sizeof(lightVertices) / sizeof(Vertex));
+	std::vector<GLuint> lightInds(lightIndices, lightIndices + sizeof(lightIndices) / sizeof(GLuint));
 	
-	lightVao.Unbind();
-	lightVbo.Unbind();
-	lightEbo.Unbind();
+	Mesh light(lightVerts, lightInds, texs);
 
 	Camera camera(screenWidth, screenHeight, vec3(0.0f, 1.0f, 2.0f));
 
@@ -129,7 +123,7 @@ int main()
 	vec4 lightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	//Pyradmid
-	Shader frogShader = frogPyramid.GetShader();
+	/*Shader frogShader = frogPyramid.GetShader();
 	{
 		frogShader.Activate();
 
@@ -140,11 +134,9 @@ int main()
 		SetVectorUniform(frogShader, "lightColor", lightColor);
 		SetVectorUniform(frogShader, "cameraPos", camera.Position);
 
-	}
+	}*/
 	
-	// Floor
-	Texture floorTexture; 
-	Texture floorSpecTexture;
+	// Floor 
 	{
 		floorShader.Activate();
 
@@ -154,13 +146,7 @@ int main()
 		SetVectorUniform(floorShader, "lightPos", lightPosition);
 		SetVectorUniform(floorShader, "lightColor", lightColor);
 		SetVectorUniform(floorShader, "cameraPos", camera.Position);
-
-		floorTexture.Init("planks.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
-		floorTexture.texUnit(floorShader, "tex0", 0);
-		 
-		floorSpecTexture.Init("planksSpec.png", GL_TEXTURE_2D, 1, GL_RGBA, GL_UNSIGNED_BYTE);
-		floorSpecTexture.texUnit(floorShader, "tex1", 1);
-
+		  
 	}
 
 	// light
@@ -174,7 +160,8 @@ int main()
 		 
 	}
 
-	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST); const char* version = (const char*)glGetString(GL_VERSION);
+	std::cout << "OpenGL Version: " << version << std::endl;
 
 
 	while (!glfwWindowShouldClose(window))
@@ -189,36 +176,20 @@ int main()
 		camera.UpdateMatrix(45.0f, 0.1f, 100.0f);
 		
 		//Pyramid
-		frogShader.Activate(); 
-		camera.Matrix(frogShader, "cameraMatrix"); 
-		frogPyramid.Draw();
+		//frogShader.Activate(); 
+		//camera.Matrix(frogShader, "cameraMatrix"); 
+		//frogPyramid.Draw();
 		 
 		//Floor 
-		floorShader.Activate();
-		camera.Matrix(floorShader, "cameraMatrix"); 
-
-		floorVao.Bind();
-		floorTexture.Bind(0);
-		floorSpecTexture.Bind(1);
-
-		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
-
-		// Light
-		lightShader.Activate();
-		camera.Matrix(lightShader, "cameraMatrix");
-		lightVao.Bind();
-		glDrawElements(GL_TRIANGLES, sizeof(lightIndices) / sizeof(int), GL_UNSIGNED_INT, 0);
-
-
+		floor.Draw(floorShader, camera);
+		light.Draw(lightShader, camera);
+  
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
-	//vao1.Delete();
-	//vbo1.Delete();
-	//ebo1.Delete();
-	//texture.Delete();
-	//shaderProgram.Delete();
+	floorShader.Delete();
+	lightShader.Delete();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();

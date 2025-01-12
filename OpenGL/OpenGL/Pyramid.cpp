@@ -1,10 +1,5 @@
 #include"Pyramid.h" 
- 
- 
-Pyramid::Pyramid()
-{
-}
-
+  
 void Pyramid::Init()
 {	// Vertices coordinates
 	GLfloat vertices[] =
@@ -46,8 +41,8 @@ void Pyramid::Init()
 
 	vao.Bind();
 
-	vbo.Init(vertices, sizeof(vertices));
-	ebo.Init(indices.data(), sizeof(float) * indices.size());
+	//vbo.Init(vertices);
+	ebo.Init(indices);
 
 	vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*)0);
 	vao.LinkAttrib(vbo, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float)));
@@ -58,7 +53,7 @@ void Pyramid::Init()
 	vbo.Unbind();
 	ebo.Unbind();
 
-	texture.Init("frog.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	//texture.Init("frog.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	texture.texUnit(shaderProgram, "tex0", 0);
 	 
 	texture.Unbind();
@@ -68,7 +63,7 @@ void Pyramid::Init()
 void Pyramid::Draw()
 {
 	vao.Bind();
-	texture.Bind(0);
+	texture.Bind();
 
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 

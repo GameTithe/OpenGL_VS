@@ -1,14 +1,14 @@
 #version 400 core
  
+in vec3 curPos;
+in vec3 normal;
 in vec3 color;
 in vec2 texCord;
-in vec3 normal;
-in vec3 curPos;
 
 out vec4 FragColor;
 
-uniform sampler2D tex0;
-uniform sampler2D tex1;
+uniform sampler2D diffuse0;
+uniform sampler2D specular0;
 
 uniform vec3 lightPos;
 uniform vec4 lightColor;
@@ -41,8 +41,8 @@ vec4 pointLight()
 	float specular = specularLight * specularPow;
 
 	 
-	//return texture(tex0, texCord) * lightColor * (diffuse + ambient + specular);
-	return texture(tex0, texCord) * (  ambient + diffuse *inten + specular * inten) * lightColor;
+	//return texture(diffuse0, texCord) * lightColor * (diffuse + ambient + specular);
+	return texture(diffuse0, texCord) * (  ambient + diffuse *inten + specular * inten) * lightColor;
 }
 
 vec4 directLight()
@@ -65,7 +65,7 @@ vec4 directLight()
 	float specular = specularLight * specularPow;
 
 	  
-	return texture(tex0, texCord) * (  ambient + diffuse + specular) * lightColor;
+	return texture(diffuse0, texCord) * (ambient + diffuse + specular) * lightColor;
 }
 
 vec4 spotLight() 
@@ -74,8 +74,6 @@ vec4 spotLight()
 	float ambient = 0.2f;
 	
 	//diffuse 
-	float outerCone = 0.90f;
-	float innerCone = 0.95f;
 
 	vec3 n_normal = normalize(normal);
 
@@ -89,18 +87,24 @@ vec4 spotLight()
 
 	float specularPow = pow(max(dot(viewDir, reflectDir), 0.0f), 16);
 	float specular = specularLight * specularPow;
+	
+	float outerCone = 0.90f; //cos value
+	float innerCone = 0.95f; //cos value
+	
+	vec3 spotDir = vec3( 0.0f , -1.0f, 0.0f);
+	float angle = dot(spotDir, -lightDir); // cos angle
+	float epsilon = innerCone - outerCone;
 
-	float angle = dot(vec3(0.0f, -1.0f, 0.0f), -lightDir);
-	float inten = clamp((angle - outerCone) / (innerCone - outerCone), 0.0f, 1.0f);
+	float inten = clamp((angle - outerCone) / epsilon, 0.0f, 1.0f);
 
-	//return texture(tex0, texCord) * lightColor * (diffuse + ambient + specular);
-	return texture(tex0, texCord) * (  ambient + diffuse *inten + specular * inten) * lightColor;
+	//return texture(diffuse0, texCord) * lightColor * (diffuse + ambient + specular);
+	return texture(diffuse0, texCord) * (  ambient + diffuse *inten + specular * inten) * lightColor;
  
 }
 void main()
 { 
 	 
 	//FragColor = pointLight();
-	//FragColor = directLight();
-	FragColor = spotLight();
+	FragColor = directLight();
+	//FragColor = spotLight();
 }
